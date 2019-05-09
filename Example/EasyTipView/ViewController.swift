@@ -64,6 +64,10 @@ class ViewController: UIViewController, EasyTipViewDelegate {
         print("\(tipView) did dismiss!")
     }
     
+    func easyTipView(tipview: EasyTipView, didTapOnHighlightedView view: UIView) {
+        
+    }
+    
     @IBAction func barButtonAction(sender: UIBarButtonItem) {
         let text = "Tip view for bar button item displayed within the navigation controller's view. Tap to dismiss."
         EasyTipView.show(forItem: self.navBarItem,

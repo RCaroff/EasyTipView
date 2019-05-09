@@ -25,6 +25,7 @@ import UIKit
 
 public protocol EasyTipViewDelegate : class {
     func easyTipViewDidDismiss(_ tipView : EasyTipView)
+    func easyTipView(tipview: EasyTipView, didTapOnHighlightedView view: UIView)
 }
 
 
@@ -140,33 +141,61 @@ public extension EasyTipView {
         transform = initialTransform
         alpha = initialAlpha
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        tap.delegate = self
-        addGestureRecognizer(tap)
+        let bubbleTap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        bubbleTap.delegate = self
+        addGestureRecognizer(bubbleTap)
         
+        let overlay = UIView(frame: CGRect(x: 0, y: 0, width: superview.frame.width, height: superview.frame.height))
+        overlay.backgroundColor = UIColor(white: 0, alpha: 0.6)
+        let overlayTap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        overlayTap.delegate = self
+        overlay.addGestureRecognizer(overlayTap)
+        
+        overlayView = overlay
+        overlayView?.alpha = 0
+        
+        superview.addSubview(overlayView ?? UIView())
         superview.addSubview(self)
+        if let snapshotView = view.snapshotView(afterScreenUpdates: true) {
+            snapshotView.frame = view.frame
+            let highlightedViewTap = UITapGestureRecognizer(target: self, action: #selector(handleHighlightedViewTap))
+            highlightedViewTap.delegate = self
+            snapshotView.addGestureRecognizer(highlightedViewTap)
+            overlayView?.addSubview(snapshotView)
+        }
         
         let animations : () -> () = {
             self.transform = finalTransform
             self.alpha = 1
+            self.overlayView?.alpha = 1
         }
         
         if animated {
             UIView.animate(withDuration: preferences.animating.showDuration, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: velocity, options: [.curveEaseInOut], animations: animations, completion: nil)
+            UIView.animate(withDuration: preferences.animating.showDuration, animations: {
+                self.overlayView?.alpha = 1
+            })
         }else{
             animations()
         }
     }
-    
+
     /**
      Dismisses the EasyTipView
      
      - parameter completion: Completion block to be executed after the EasyTipView is dismissed.
      */
+    @objc
     func dismiss(withCompletion completion: (() -> ())? = nil){
         
         let damping = preferences.animating.springDamping
         let velocity = preferences.animating.springVelocity
+        
+        UIView.animate(withDuration: preferences.animating.dismissDuration, animations: {
+            self.overlayView?.alpha = 0
+        }, completion: { _ in
+            self.overlayView?.removeFromSuperview()
+        })
         
         UIView.animate(withDuration: preferences.animating.dismissDuration, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: velocity, options: [.curveEaseInOut], animations: { 
             self.transform = self.preferences.animating.dismissTransform
@@ -294,6 +323,8 @@ open class EasyTipView: UIView {
     }
     
     fileprivate weak var presentingView: UIView?
+    fileprivate var overlayView: UIView?
+    fileprivate var highlightedView: UIView?
     fileprivate weak var delegate: EasyTipViewDelegate?
     fileprivate var arrowTip = CGPoint.zero
     fileprivate(set) open var preferences: Preferences
@@ -507,6 +538,11 @@ open class EasyTipView: UIView {
     
     @objc func handleTap() {
         dismiss()
+    }
+    
+    @objc func handleHighlightedViewTap() {
+        guard let view = highlightedView else { return }
+        delegate?.easyTipView(tipview: self, didTapOnHighlightedView: view)
     }
     
     // MARK:- Drawing -
