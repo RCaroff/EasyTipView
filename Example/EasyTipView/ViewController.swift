@@ -37,6 +37,7 @@ class ViewController: UIViewController, EasyTipViewDelegate {
     @IBOutlet weak var buttonE: UIButton!
     @IBOutlet weak var buttonF: UIButton!
     @IBOutlet weak var buttonG: UIButton!
+    @IBOutlet weak var buttonLambda: UIButton!
     
     weak var tipView: EasyTipView?
     
@@ -49,15 +50,17 @@ class ViewController: UIViewController, EasyTipViewDelegate {
         
         preferences.drawing.font = UIFont(name: "Futura-Medium", size: 13)!
         preferences.drawing.foregroundColor = UIColor.white
-        preferences.drawing.backgroundColor = UIColor(hue:0.46, saturation:0.99, brightness:0.6, alpha:1)
-        
+        preferences.drawing.backgroundColor = UIColor(white: 0, alpha: 0.2)
         EasyTipView.globalPreferences = preferences
         self.view.backgroundColor = UIColor(hue:0.75, saturation:0.01, brightness:0.96, alpha:1.00)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.toolbarItemAction()
+        //self.toolbarItemAction()
+        buttonLambdaAction()
+        
+        //EasyTipView.show(animated: true, forItem: navBarItem, text: "Cool", delegate: self)
     }
     
     func easyTipViewDidDismiss(_ tipView: EasyTipView) {
@@ -65,7 +68,14 @@ class ViewController: UIViewController, EasyTipViewDelegate {
     }
     
     func easyTipView(tipview: EasyTipView, didTapOnHighlightedView view: UIView) {
-        
+        print("highlightedView tapped")
+    }
+    
+    @IBAction func buttonLambdaAction() {
+        EasyTipView.show(animated: true,
+                         forView: buttonLambda,
+                         text: "ça fonctionne bien !",
+                         delegate: self)
     }
     
     @IBAction func barButtonAction(sender: UIBarButtonItem) {
@@ -90,7 +100,7 @@ class ViewController: UIViewController, EasyTipViewDelegate {
             preferences.drawing.shadowOpacity = 0.75
             
             let tip = EasyTipView(text: text, preferences: preferences, delegate: self)
-            tip.show(forItem: toolbarItem)
+            tip.show(animated: true, forItem: toolbarItem, withinSuperView: self.tabBarController?.tabBar)
             tipView = tip
         }
     }
@@ -235,7 +245,7 @@ class ViewController: UIViewController, EasyTipViewDelegate {
         }
     }
     
-    func configureUI () {
+    func  configureUI () {
         let color = UIColor(hue:0.46, saturation:0.99, brightness:0.6, alpha:1)
         
         buttonA.backgroundColor = UIColor(hue:0.58, saturation:0.1, brightness:1, alpha:1)

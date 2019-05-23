@@ -201,6 +201,19 @@
                                     <action selector="buttonActionWithSender:" destination="7mQ-RG-Clx" eventType="touchUpInside" id="fUK-oR-Pnv"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t4z-UD-stE">
+                                <rect key="frame" x="151.5" y="416" width="72" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="72" id="0od-fj-nMA"/>
+                                    <constraint firstAttribute="height" constant="30" id="HDs-hf-V4r"/>
+                                </constraints>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" red="0.34141296148300171" green="0.6334795355796814" blue="0.97234970331192017" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonLambdaAction" destination="7mQ-RG-Clx" eventType="touchUpInside" id="Hb0-2p-fSi"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -209,6 +222,8 @@
                             <constraint firstItem="jYe-y0-pin" firstAttribute="leading" secondItem="K9k-ME-Y4A" secondAttribute="leading" id="7T3-iy-tpA"/>
                             <constraint firstItem="jYe-y0-pin" firstAttribute="top" secondItem="rxZ-Qh-gs3" secondAttribute="bottom" constant="25" id="KYr-qo-UVX"/>
                             <constraint firstItem="JdK-KQ-BEN" firstAttribute="top" secondItem="eSl-wY-dJ4" secondAttribute="bottom" constant="20" id="LNg-8b-fCT"/>
+                            <constraint firstItem="t4z-UD-stE" firstAttribute="centerX" secondItem="K9k-ME-Y4A" secondAttribute="centerX" id="OSb-7D-XdZ"/>
+                            <constraint firstItem="t4z-UD-stE" firstAttribute="top" secondItem="NUT-CX-WGP" secondAttribute="bottom" constant="7.5" id="Q3q-Mw-cva"/>
                             <constraint firstAttribute="trailing" secondItem="hWU-jR-9Ec" secondAttribute="trailing" constant="16" id="Ssy-Od-Vns"/>
                             <constraint firstAttribute="trailing" secondItem="lCx-tc-eXO" secondAttribute="trailing" constant="1" id="TIf-ok-bgI"/>
                             <constraint firstAttribute="trailing" secondItem="HS8-yg-j4l" secondAttribute="trailing" constant="16" id="Ubd-Me-GUc"/>
@@ -238,6 +253,7 @@
                         <outlet property="buttonE" destination="lCx-tc-eXO" id="Gyl-pL-7Dw"/>
                         <outlet property="buttonF" destination="t2B-Ub-hJ7" id="Uzp-Qd-E26"/>
                         <outlet property="buttonG" destination="HS8-yg-j4l" id="sv7-RK-cGC"/>
+                        <outlet property="buttonLambda" destination="t4z-UD-stE" id="LCw-tb-6XX"/>
                         <outlet property="navBarItem" destination="HcR-vd-SJ7" id="PXK-2J-bNl"/>
                         <outlet property="smallContainerView" destination="NUT-CX-WGP" id="AO3-b9-Iky"/>
                         <outlet property="toolbarItem" destination="L9z-Ee-Hcj" id="cow-BG-IkN"/>

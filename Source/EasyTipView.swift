@@ -126,7 +126,7 @@ public extension EasyTipView {
     func show(animated: Bool = true, forView view: UIView, withinSuperview superview: UIView? = nil) {
         
         precondition(superview == nil || view.hasSuperview(superview!), "The supplied superview <\(superview!)> is not a direct nor an indirect superview of the supplied reference view <\(view)>. The superview passed to this method should be a direct or an indirect superview of the reference view. To display the tooltip within the main window, ignore the superview parameter.")
-        
+        highlightedView = view
         let superview = superview ?? UIApplication.shared.windows.first!
         
         let initialTransform = preferences.animating.showInitialTransform
@@ -156,8 +156,10 @@ public extension EasyTipView {
         
         superview.addSubview(overlayView ?? UIView())
         superview.addSubview(self)
-        if let snapshotView = view.snapshotView(afterScreenUpdates: true) {
-            snapshotView.frame = view.frame
+        
+        if let snapshotView = view.snapshotView(afterScreenUpdates: false) {
+            let convertedPoint = superview.convert(view.frame.origin, to: overlayView)
+            snapshotView.frame = CGRect(x: convertedPoint.x, y: convertedPoint.y, width: view.frame.width, height: view.frame.height)
             let highlightedViewTap = UITapGestureRecognizer(target: self, action: #selector(handleHighlightedViewTap))
             highlightedViewTap.delegate = self
             snapshotView.addGestureRecognizer(highlightedViewTap)
