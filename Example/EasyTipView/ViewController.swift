@@ -47,11 +47,10 @@ class ViewController: UIViewController, EasyTipViewDelegate {
         self.configureUI()
         
         var preferences = EasyTipView.Preferences()
-        
-        preferences.drawing.font = UIFont(name: "Futura-Medium", size: 13)!
         preferences.drawing.foregroundColor = UIColor.white
         preferences.drawing.backgroundColor = UIColor(white: 0, alpha: 0.2)
         EasyTipView.globalPreferences = preferences
+        setupFont()
         self.view.backgroundColor = UIColor(hue:0.75, saturation:0.01, brightness:0.96, alpha:1.00)
     }
     
@@ -63,6 +62,27 @@ class ViewController: UIViewController, EasyTipViewDelegate {
         //EasyTipView.show(animated: true, forItem: navBarItem, text: "Cool", delegate: self)
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setupFont()
+    }
+    
+    func setupFont() {
+        guard let dynamicFont = UIFont(name: "Futura-Medium", size: 13) else {
+            fatalError("""
+        Failed to load the "CustomFont-Light" font.
+        Make sure the font file is included in the project and the font name is spelled correctly.
+        """
+            )
+        }
+        
+        if #available(iOS 11.0, *) {
+            EasyTipView.globalPreferences.drawing.font = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: dynamicFont)
+        } else {
+            EasyTipView.globalPreferences.drawing.font = dynamicFont
+        }
+    }
+
     func easyTipViewDidDismiss(_ tipView: EasyTipView) {
         print("\(tipView) did dismiss!")
     }

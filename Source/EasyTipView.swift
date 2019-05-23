@@ -645,7 +645,6 @@ open class EasyTipView: UIView {
         paragraphStyle.alignment = preferences.drawing.textAlignment
         paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
         
-        
         let textRect = getContentRect(from: bubbleFrame)
         
         #if swift(>=4.2)
