@@ -38,6 +38,7 @@ class ViewController: UIViewController, EasyTipViewDelegate {
     @IBOutlet weak var buttonF: UIButton!
     @IBOutlet weak var buttonG: UIButton!
     @IBOutlet weak var buttonLambda: UIButton!
+    @IBOutlet weak var tableView: UITableView!
     
     weak var tipView: EasyTipView?
     
@@ -49,6 +50,7 @@ class ViewController: UIViewController, EasyTipViewDelegate {
         var preferences = EasyTipView.Preferences()
         preferences.drawing.foregroundColor = UIColor.white
         preferences.drawing.backgroundColor = UIColor(white: 0, alpha: 0.2)
+        preferences.positioning.maxWidth = 300
         EasyTipView.globalPreferences = preferences
         setupFont()
         self.view.backgroundColor = UIColor(hue:0.75, saturation:0.01, brightness:0.96, alpha:1.00)
@@ -56,10 +58,7 @@ class ViewController: UIViewController, EasyTipViewDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //self.toolbarItemAction()
-        buttonLambdaAction()
-        
-        //EasyTipView.show(animated: true, forItem: navBarItem, text: "Cool", delegate: self)
+        barButtonAction(sender: navBarItem)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -118,7 +117,7 @@ class ViewController: UIViewController, EasyTipViewDelegate {
             preferences.drawing.shadowColor = UIColor.black
             preferences.drawing.shadowRadius = 2
             preferences.drawing.shadowOpacity = 0.75
-            
+            preferences.drawing.arrowPosition = .any
             let tip = EasyTipView(text: text, preferences: preferences, delegate: self)
             tip.show(animated: true, forItem: toolbarItem, withinSuperView: self.tabBarController?.tabBar)
             tipView = tip
@@ -277,3 +276,31 @@ class ViewController: UIViewController, EasyTipViewDelegate {
     }
 }
 
+extension ViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let row = tableView.cellForRow(at: indexPath) else { return }
+        EasyTipView.show(animated: true,
+                         forView: row,
+                         text: row.textLabel?.text ?? "",
+                         delegate: self)
+    }
+}
+
+extension ViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! UITableViewCell
+        switch indexPath.row {
+        case 0:
+            cell.textLabel?.text = "Hello world"
+        default:
+            cell.textLabel?.text = "Goodbye world"
+        }
+        
+        
+        return cell
+    }
+}

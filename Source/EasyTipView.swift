@@ -47,7 +47,7 @@ public extension EasyTipView {
      */
     class func show(animated: Bool = true, forItem item: UIBarItem, withinSuperview superview: UIView? = nil, text: String, preferences: Preferences = EasyTipView.globalPreferences, delegate: EasyTipViewDelegate? = nil){
         
-        if let view = item.view {
+        if let view = item.view?.superview {
             show(animated: animated, forView: view, withinSuperview: superview, text: text, preferences: preferences, delegate: delegate)
         }
     }
@@ -80,7 +80,7 @@ public extension EasyTipView {
      */
     class func show(animated: Bool = true, forItem item: UIBarItem, withinSuperview superview: UIView? = nil, contentView: UIView, preferences: Preferences = EasyTipView.globalPreferences, delegate: EasyTipViewDelegate? = nil){
         
-        if let view = item.view {
+        if let view = item.view?.superview {
             show(animated: animated, forView: view, withinSuperview: superview, contentView: contentView, preferences: preferences, delegate: delegate)
         }
     }
@@ -111,7 +111,7 @@ public extension EasyTipView {
      - parameter superview: A view which is part of the UIBarButtonItem instances superview hierarchy. Ignore this parameter in order to display the EasyTipView within the main window.
      */
     func show(animated: Bool = true, forItem item: UIBarItem, withinSuperView superview: UIView? = nil) {
-        if let view = item.view {
+        if let view = item.view?.superview {
             show(animated: animated, forView: view, withinSuperview: superview)
         }
     }
@@ -157,8 +157,8 @@ public extension EasyTipView {
         superview.addSubview(overlayView ?? UIView())
         superview.addSubview(self)
         
-        if let snapshotView = view.snapshotView(afterScreenUpdates: false) {
-            let convertedPoint = superview.convert(view.frame.origin, to: overlayView)
+        if let snapshotView = view.snapshotView(afterScreenUpdates: false), let itemSuperView = view.superview {
+            let convertedPoint = itemSuperView.convert(view.frame.origin, to: overlayView)
             snapshotView.frame = CGRect(x: convertedPoint.x, y: convertedPoint.y, width: view.frame.width, height: view.frame.height)
             let highlightedViewTap = UITapGestureRecognizer(target: self, action: #selector(handleHighlightedViewTap))
             highlightedViewTap.delegate = self
@@ -487,6 +487,8 @@ open class EasyTipView: UIView {
         } else {
           superviewFrame = superview.frame
         }
+        
+        overlayView?.frame = superview.frame
         
         var frame = computeFrame(arrowPosition: position, refViewFrame: refViewFrame, superviewFrame: superviewFrame)
         
