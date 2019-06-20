@@ -25,7 +25,7 @@ import UIKit
 import Darwin
 import EasyTipView
 
-class ViewController: UIViewController, EasyTipViewDelegate {
+class ViewController: UIViewController {
     
     @IBOutlet weak var toolbarItem: UIBarButtonItem!
     @IBOutlet weak var smallContainerView: UIView!
@@ -50,7 +50,11 @@ class ViewController: UIViewController, EasyTipViewDelegate {
         var preferences = EasyTipView.Preferences()
         preferences.drawing.foregroundColor = UIColor.white
         preferences.drawing.backgroundColor = UIColor(white: 0, alpha: 0.2)
+        preferences.drawing.backgroundOverlayEnabled = true
+        preferences.drawing.backgroundOverlayOpacity = 0.6
+        preferences.drawing.backgroundOverlayColor = .red
         preferences.positioning.maxWidth = 300
+        preferences.interacting.dismissMode = .closeIcon
         EasyTipView.globalPreferences = preferences
         setupFont()
         self.view.backgroundColor = UIColor(hue:0.75, saturation:0.01, brightness:0.96, alpha:1.00)
@@ -93,16 +97,14 @@ class ViewController: UIViewController, EasyTipViewDelegate {
     @IBAction func buttonLambdaAction() {
         EasyTipView.show(animated: true,
                          forView: buttonLambda,
-                         text: "ça fonctionne bien !",
-                         delegate: self)
+                         text: "ça fonctionne bien !")
     }
     
     @IBAction func barButtonAction(sender: UIBarButtonItem) {
         let text = "Tip view for bar button item displayed within the navigation controller's view. Tap to dismiss."
         EasyTipView.show(forItem: self.navBarItem,
             withinSuperview: self.navigationController?.view,
-            text: text,
-            delegate : self)
+            text: text)
     }
     
     @IBAction func toolbarItemAction() {
@@ -118,7 +120,7 @@ class ViewController: UIViewController, EasyTipViewDelegate {
             preferences.drawing.shadowRadius = 2
             preferences.drawing.shadowOpacity = 0.75
             preferences.drawing.arrowPosition = .any
-            let tip = EasyTipView(text: text, preferences: preferences, delegate: self)
+            let tip = EasyTipView(text: text, preferences: preferences)
             tip.show(animated: true, forItem: toolbarItem, withinSuperView: self.tabBarController?.tabBar)
             tipView = tip
         }
@@ -214,7 +216,7 @@ class ViewController: UIViewController, EasyTipViewDelegate {
             preferences.animating.showInitialAlpha = 0
             preferences.animating.showDuration = 1
             preferences.animating.dismissDuration = 1
-            preferences.animating.dismissOnTap = false
+            preferences.interacting.dismissMode = .closeIcon
             
             preferences.positioning.maxWidth = 150
             
@@ -281,8 +283,7 @@ extension ViewController: UITableViewDelegate {
         guard let row = tableView.cellForRow(at: indexPath) else { return }
         EasyTipView.show(animated: true,
                          forView: row,
-                         text: row.textLabel?.text ?? "",
-                         delegate: self)
+                         text: row.textLabel?.text ?? "")
     }
 }
 

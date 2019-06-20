@@ -62,36 +62,36 @@ extension CGRect {
             self.origin.y = newValue
         }
     }
-//
-//    var width: CGFloat {
-//        get {
-//         return self.size.width
-//        }
-//        
-//        set {
-//            self.size.width = newValue
-//        }
-//    }
-//    
-//    var height: CGFloat {
-//        get {
-//            return self.size.height
-//        }
-//        
-//        set{
-//            self.size.height = newValue
-//        }
-//    }
-    
-//    var maxX: CGFloat {
-//        return self.maxX
-//    }
-//    
-//    var maxY: CGFloat {
-//        return self.maxY
-//    }
     
     var center: CGPoint {
         return CGPoint(x: self.x + self.width / 2, y: self.y + self.height / 2)
+    }
+}
+
+extension UIImage {
+    
+    /// Fill an image with a color.
+    /// Warning : doesn't work with sliced / stretchable images !
+    func tint(_ color: UIColor) -> UIImage {
+        
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        color.setFill()
+        
+        guard let context = UIGraphicsGetCurrentContext() else { return self }
+        
+        context.translateBy(x: 0, y: size.height)
+        context.scaleBy(x: 1.0, y: -1.0)
+        context.setBlendMode(.normal)
+        
+        guard let cgImage = self.cgImage else { return self }
+        
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        context.clip(to: rect, mask: cgImage)
+        context.fill(rect)
+        
+        guard let newImage = UIGraphicsGetImageFromCurrentImageContext() else { return self }
+        UIGraphicsEndImageContext()
+        
+        return newImage
     }
 }
