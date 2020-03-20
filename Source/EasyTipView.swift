@@ -105,7 +105,7 @@ public extension EasyTipView {
      - parameter superview: A view which is part of the UIBarButtonItem instances superview hierarchy. Ignore this parameter in order to display the EasyTipView within the main window.
      */
     func show(animated: Bool = true, forItem item: UIBarItem, withinSuperView superview: UIView? = nil) {
-        if let view = item.view?.superview {
+        if let view = item.view {
             show(animated: animated, forView: view, withinSuperview: superview)
         }
     }
@@ -188,8 +188,6 @@ public extension EasyTipView {
             addGestureRecognizer(bubbleTap)
         case .outOfTheBox:
             overlayView?.addGestureRecognizer(overlayTap)
-        case .closeIcon:
-            addCloseButton()
         case .none:
             break
         }
@@ -266,7 +264,6 @@ open class EasyTipView: UIView {
     }
     
     public enum DismissMode {
-        case closeIcon
         case outOfTheBox
         case inTheBox
         case everywhere
@@ -293,17 +290,6 @@ open class EasyTipView: UIView {
             public var backgroundOverlayEnabled = true
             public var backgroundOverlayColor   = UIColor.black
             public var backgroundOverlayOpacity = CGFloat(0.6)
-            public var closeImage: UIImage
-            public var closeImageColor          = UIColor.white
-            
-            init() {
-                guard let closeImagePath = Bundle(for: EasyTipView.self).path(forResource: "close", ofType: "png") else {
-                    fatalError("Cannot find resource close.png")
-                }
-                
-                let image = UIImage(contentsOfFile: closeImagePath) ?? UIImage()
-                closeImage = image.tint(closeImageColor)
-            }
         }
         
         public struct Positioning {
@@ -322,8 +308,8 @@ open class EasyTipView: UIView {
             public var springVelocity           = CGFloat(0.7)
             public var showInitialAlpha         = CGFloat(0)
             public var dismissFinalAlpha        = CGFloat(0)
-            public var showDuration             = 0.7
-            public var dismissDuration          = 0.7
+            public var showDuration             = 0.3
+            public var dismissDuration          = 0.3
         }
         
         public struct Interacting {
@@ -714,24 +700,7 @@ open class EasyTipView: UIView {
         
         text.draw(in: textRect, withAttributes: attributes)
     }
-    
-    func addCloseButton() {
-        
-        let bubbleFrame = getBubbleFrame()
 
-        let button = UIButton(type: .custom)
-        button.frame = CGRect(x: bubbleFrame.x + bubbleFrame.width - 60,
-                              y: bubbleFrame.y + 10,
-                              width: 50,
-                              height: 50)
-        button.contentVerticalAlignment = .top
-        button.contentHorizontalAlignment = .right
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 0)
-        button.setImage(preferences.drawing.closeImage, for: .normal)
-        button.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
-        addSubview(button)
-    }
-    
     fileprivate func drawShadow() {
         if preferences.hasShadow {
             self.layer.masksToBounds = false

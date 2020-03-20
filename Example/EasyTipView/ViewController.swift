@@ -26,8 +26,9 @@ import Darwin
 import EasyTipView
 
 class ViewController: UIViewController {
-    
-    @IBOutlet weak var toolbarItem: UIBarButtonItem!
+
+    @IBOutlet weak var tabBar: UITabBar!
+    @IBOutlet weak var tbItem: UITabBarItem!
     @IBOutlet weak var smallContainerView: UIView!
     @IBOutlet weak var navBarItem: UIBarButtonItem!
     @IBOutlet weak var buttonA: UIButton!
@@ -44,7 +45,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.configureUI()
         
         var preferences = EasyTipView.Preferences()
@@ -52,9 +52,9 @@ class ViewController: UIViewController {
         preferences.drawing.backgroundColor = UIColor(white: 0, alpha: 0.2)
         preferences.drawing.backgroundOverlayEnabled = true
         preferences.drawing.backgroundOverlayOpacity = 0.6
-        preferences.drawing.backgroundOverlayColor = .red
+        preferences.drawing.backgroundOverlayColor = .darkGray
         preferences.positioning.maxWidth = 300
-        preferences.interacting.dismissMode = .closeIcon
+        preferences.interacting.dismissMode = .outOfTheBox
         EasyTipView.globalPreferences = preferences
         setupFont()
         self.view.backgroundColor = UIColor(hue:0.75, saturation:0.01, brightness:0.96, alpha:1.00)
@@ -62,7 +62,9 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        barButtonAction(sender: navBarItem)
+//        barButtonAction(sender: navBarItem)
+
+        toolbarItemAction()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -121,7 +123,7 @@ class ViewController: UIViewController {
             preferences.drawing.shadowOpacity = 0.75
             preferences.drawing.arrowPosition = .any
             let tip = EasyTipView(text: text, preferences: preferences)
-            tip.show(animated: true, forItem: toolbarItem, withinSuperView: self.tabBarController?.tabBar)
+            tip.show(animated: true, forItem: tbItem, withinSuperView: self.tabBarController?.tabBar)
             tipView = tip
         }
     }
@@ -138,8 +140,8 @@ class ViewController: UIViewController {
             preferences.animating.dismissTransform = CGAffineTransform(translationX: 100, y: 0)
             preferences.animating.showInitialTransform = CGAffineTransform(translationX: -100, y: 0)
             preferences.animating.showInitialAlpha = 0
-            preferences.animating.showDuration = 1
-            preferences.animating.dismissDuration = 1
+            preferences.animating.showDuration = 0.3
+            preferences.animating.dismissDuration = 0.3
             
             let view = EasyTipView(text: "Tip view within the green superview. Tap to dismiss.", preferences: preferences)
             view.show(forView: buttonA, withinSuperview: self.smallContainerView)
@@ -154,8 +156,8 @@ class ViewController: UIViewController {
             preferences.animating.dismissTransform = CGAffineTransform(translationX: 0, y: -15)
             preferences.animating.showInitialTransform = CGAffineTransform(translationX: 0, y: 15)
             preferences.animating.showInitialAlpha = 0
-            preferences.animating.showDuration = 1
-            preferences.animating.dismissDuration = 1
+            preferences.animating.showDuration = 0.3
+            preferences.animating.dismissDuration = 0.3
             preferences.drawing.arrowPosition = .top
             
             let text = "Tip view inside the navigation controller's view. Tap to dismiss!"
@@ -172,8 +174,8 @@ class ViewController: UIViewController {
             preferences.animating.dismissTransform = CGAffineTransform(translationX: 0, y: -15)
             preferences.animating.showInitialTransform = CGAffineTransform(translationX: 0, y: -15)
             preferences.animating.showInitialAlpha = 0
-            preferences.animating.showDuration = 1.5
-            preferences.animating.dismissDuration = 1.5
+            preferences.animating.showDuration = 0.3
+            preferences.animating.dismissDuration = 0.3
             preferences.drawing.arrowPosition = .top
             
             let text = "This tip view cannot be presented with the arrow on the top position, so position bottom has been chosen instead. Tap to dismiss."
@@ -194,8 +196,8 @@ class ViewController: UIViewController {
             preferences.animating.dismissTransform = CGAffineTransform(translationX: 0, y: 100)
             preferences.animating.showInitialTransform = CGAffineTransform(translationX: 0, y: -100)
             preferences.animating.showInitialAlpha = 0
-            preferences.animating.showDuration = 1
-            preferences.animating.dismissDuration = 1
+            preferences.animating.showDuration = 0.3
+            preferences.animating.dismissDuration = 0.3
             
             preferences.positioning.maxWidth = 150
             
@@ -214,9 +216,9 @@ class ViewController: UIViewController {
             preferences.animating.dismissTransform = CGAffineTransform(translationX: -30, y: -100)
             preferences.animating.showInitialTransform = CGAffineTransform(translationX: 30, y: 100)
             preferences.animating.showInitialAlpha = 0
-            preferences.animating.showDuration = 1
-            preferences.animating.dismissDuration = 1
-            preferences.interacting.dismissMode = .closeIcon
+            preferences.animating.showDuration = 0.3
+            preferences.animating.dismissDuration = 0.3
+            preferences.interacting.dismissMode = .outOfTheBox
             
             preferences.positioning.maxWidth = 150
             
@@ -231,8 +233,8 @@ class ViewController: UIViewController {
             preferences.animating.dismissTransform = CGAffineTransform(translationX: 0, y: -15)
             preferences.animating.showInitialTransform = CGAffineTransform(translationX: 0, y: 15)
             preferences.animating.showInitialAlpha = 0
-            preferences.animating.showDuration = 1
-            preferences.animating.dismissDuration = 1
+            preferences.animating.showDuration = 0.3
+            preferences.animating.dismissDuration = 0.3
             preferences.drawing.arrowPosition = .bottom
             
             preferences.positioning.contentHInset = 5
@@ -257,8 +259,8 @@ class ViewController: UIViewController {
             preferences.animating.dismissTransform = CGAffineTransform(translationX: 100, y: 0)
             preferences.animating.showInitialTransform = CGAffineTransform(translationX: 100, y: 0)
             preferences.animating.showInitialAlpha = 0
-            preferences.animating.showDuration = 1
-            preferences.animating.dismissDuration = 1
+            preferences.animating.showDuration = 0.3
+            preferences.animating.dismissDuration = 0.3
             
             EasyTipView.show(forView: self.buttonD,
                 text: "Tip view within the topmost window. Tap to dismiss.",
@@ -293,15 +295,20 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") ?? UITableViewCell()
         switch indexPath.row {
         case 0:
-            cell.textLabel?.text = "Hello world"
+          cell.textLabel?.text = "Hello world"
         default:
-            cell.textLabel?.text = "Goodbye world"
+          cell.textLabel?.text = "Goodbye world"
         }
-        
-        
+
         return cell
+    }
+}
+
+extension ViewController: UITabBarDelegate {
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        toolbarItemAction()
     }
 }

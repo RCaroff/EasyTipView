@@ -175,7 +175,7 @@
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = PBV4683L7P;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
@@ -391,7 +391,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.radiofrance.demo.EasyTipView-demo";
 				PRODUCT_NAME = "EasyTipView-Example_Example";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -408,7 +408,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.radiofrance.demo.EasyTipView-demo";
 				PRODUCT_NAME = "EasyTipView-Example_Example";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
