@@ -39,9 +39,8 @@ public extension EasyTipView {
      - parameter preferences: The preferences which will configure the EasyTipView.
      - parameter delegate:    The delegate.
      */
-    class func show(animated: Bool = true, forItem item: UIBarItem, withinSuperview superview: UIView? = nil, text: String, preferences: Preferences = EasyTipView.globalPreferences){
-        
-        if let view = item.view?.superview {
+    class func show(animated: Bool = true, forItem item: UIBarButtonItem, withinSuperview superview: UIView? = nil, text: String, preferences: Preferences = EasyTipView.globalPreferences){
+        if let view = item.customView ?? item.view?.superview {
             show(animated: animated, forView: view, withinSuperview: superview, text: text, preferences: preferences)
         }
     }
@@ -73,7 +72,6 @@ public extension EasyTipView {
      - parameter delegate:    The delegate.
      */
     class func show(animated: Bool = true, forItem item: UIBarItem, withinSuperview superview: UIView? = nil, contentView: UIView, preferences: Preferences = EasyTipView.globalPreferences){
-        
         if let view = item.view?.superview {
             show(animated: animated, forView: view, withinSuperview: superview, contentView: contentView, preferences: preferences)
         }
@@ -90,7 +88,6 @@ public extension EasyTipView {
      - parameter delegate:    The delegate.
      */
     class func show(animated: Bool = true, forView view: UIView, withinSuperview superview: UIView? = nil, contentView: UIView, preferences: Preferences = EasyTipView.globalPreferences){
-        
         let ev = EasyTipView(contentView: contentView, preferences: preferences)
         ev.show(animated: animated, forView: view, withinSuperview: superview)
     }
@@ -138,7 +135,7 @@ public extension EasyTipView {
         if preferences.drawing.backgroundOverlayEnabled {
             drawOverlay(withinSuperview: superview)
         }
-        
+        superview.addSubview(self)
         let animations : () -> () = {
             self.transform = finalTransform
             self.alpha = 1
@@ -169,25 +166,28 @@ public extension EasyTipView {
         overlayView?.alpha = 0
         
         superview.addSubview(overlayView ?? UIView())
-        superview.addSubview(self)
         
         addHighlightView()
     }
     
     private func manageTap() {
-        let overlayTap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        overlayTap.delegate = self
+        let outTap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        outTap.delegate = self
         let bubbleTap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         bubbleTap.delegate = self
         
         switch preferences.interacting.dismissMode {
         case .everywhere:
-            overlayView?.addGestureRecognizer(overlayTap)
+            overlayView?.addGestureRecognizer(outTap)
             addGestureRecognizer(bubbleTap)
         case .inTheBox:
             addGestureRecognizer(bubbleTap)
         case .outOfTheBox:
-            overlayView?.addGestureRecognizer(overlayTap)
+            if overlayView != nil {
+                overlayView?.addGestureRecognizer(outTap)
+            } else {
+                superview?.addGestureRecognizer(outTap)
+            }
         case .none:
             break
         }
@@ -195,9 +195,9 @@ public extension EasyTipView {
     
     private func addHighlightView() {
         guard let highlightedView = highlightedView else { return }
-        guard let snapshotView = highlightedView.snapshotView(afterScreenUpdates: false),
+        guard let snapshotView = highlightedView.snapshotView(afterScreenUpdates: true),
             let itemSuperView = highlightedView.superview else { return }
-        
+
         let convertedPoint = itemSuperView.convert(highlightedView.frame.origin, to: overlayView)
         snapshotView.frame = CGRect(x: convertedPoint.x,
                                     y: convertedPoint.y,

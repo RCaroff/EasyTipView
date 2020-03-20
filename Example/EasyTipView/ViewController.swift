@@ -65,6 +65,7 @@ class ViewController: UIViewController {
 //        barButtonAction(sender: navBarItem)
 
         toolbarItemAction()
+
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -97,9 +98,14 @@ class ViewController: UIViewController {
     }
     
     @IBAction func buttonLambdaAction() {
-        EasyTipView.show(animated: true,
-                         forView: buttonLambda,
-                         text: "ça fonctionne bien !")
+        var preferences = EasyTipView.globalPreferences
+        preferences.drawing.backgroundOverlayEnabled = false
+        preferences.drawing.backgroundColor = .systemYellow
+        preferences.drawing.foregroundColor = UIColor.darkGray
+        preferences.drawing.textAlignment = NSTextAlignment.center
+        preferences.drawing.cornerRadius = 20
+
+        EasyTipView.show(animated: true, forView: buttonLambda, text: "ça fonctionne bien !", preferences: preferences)
     }
     
     @IBAction func barButtonAction(sender: UIBarButtonItem) {
@@ -123,7 +129,7 @@ class ViewController: UIViewController {
             preferences.drawing.shadowOpacity = 0.75
             preferences.drawing.arrowPosition = .any
             let tip = EasyTipView(text: text, preferences: preferences)
-            tip.show(animated: true, forItem: tbItem, withinSuperView: self.tabBarController?.tabBar)
+            tip.show(animated: true, forItem: tbItem)
             tipView = tip
         }
     }
@@ -269,6 +275,7 @@ class ViewController: UIViewController {
     }
     
     func  configureUI () {
+        tabBar.unselectedItemTintColor = .systemYellow
         let color = UIColor(hue:0.46, saturation:0.99, brightness:0.6, alpha:1)
         
         buttonA.backgroundColor = UIColor(hue:0.58, saturation:0.1, brightness:1, alpha:1)
