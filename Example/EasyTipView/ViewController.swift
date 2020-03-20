@@ -26,7 +26,6 @@ import Darwin
 import EasyTipView
 
 class ViewController: UIViewController {
-
     @IBOutlet weak var tabBar: UITabBar!
     @IBOutlet weak var tbItem: UITabBarItem!
     @IBOutlet weak var smallContainerView: UIView!
@@ -36,7 +35,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var buttonC: UIButton!
     @IBOutlet weak var buttonD: UIButton!
     @IBOutlet weak var buttonE: UIButton!
-    @IBOutlet weak var buttonF: UIButton!
     @IBOutlet weak var buttonG: UIButton!
     @IBOutlet weak var buttonLambda: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -108,7 +106,7 @@ class ViewController: UIViewController {
         EasyTipView.show(animated: true, forView: buttonLambda, text: "ça fonctionne bien !", preferences: preferences)
     }
     
-    @IBAction func barButtonAction(sender: UIBarButtonItem) {
+    @IBAction func barButtonAction() {
         let text = "Tip view for bar button item displayed within the navigation controller's view. Tap to dismiss."
         EasyTipView.show(forItem: self.navBarItem,
             withinSuperview: self.navigationController?.view,
@@ -210,27 +208,6 @@ class ViewController: UIViewController {
             let view = EasyTipView(text: "Tip view positioned with the arrow on the right. Tap to dismiss.", preferences: preferences)
             view.show(forView: buttonE, withinSuperview: self.navigationController?.view!)
             
-        case buttonF:
-            
-            var preferences = EasyTipView.Preferences()
-            preferences.drawing.backgroundColor = buttonF.backgroundColor!
-            preferences.drawing.foregroundColor = UIColor.white
-            preferences.drawing.textAlignment = NSTextAlignment.center
-            
-            preferences.drawing.arrowPosition = .left
-            
-            preferences.animating.dismissTransform = CGAffineTransform(translationX: -30, y: -100)
-            preferences.animating.showInitialTransform = CGAffineTransform(translationX: 30, y: 100)
-            preferences.animating.showInitialAlpha = 0
-            preferences.animating.showDuration = 0.3
-            preferences.animating.dismissDuration = 0.3
-            preferences.interacting.dismissMode = .outOfTheBox
-            
-            preferences.positioning.maxWidth = 150
-            
-            let view = EasyTipView(text: "Tip view positioned with the arrow on the left. Tap won't dismiss.", preferences: preferences)
-            view.show(forView: buttonF, withinSuperview: self.navigationController?.view!)
-            
         case buttonG:
             
             var preferences = EasyTipView.globalPreferences
@@ -275,6 +252,7 @@ class ViewController: UIViewController {
     }
     
     func  configureUI () {
+        navigationController?.navigationBar.barTintColor = .white
         tabBar.unselectedItemTintColor = .systemYellow
         let color = UIColor(hue:0.46, saturation:0.99, brightness:0.6, alpha:1)
         
@@ -284,6 +262,19 @@ class ViewController: UIViewController {
         
         self.buttonB.backgroundColor = color
         self.smallContainerView.backgroundColor = color
+        setupRightNavigationBarButton()
+    }
+
+    func setupRightNavigationBarButton() {
+        let totoButton = UIButton(type: .custom)
+        totoButton.setTitle("Add", for: .normal)
+        if #available(iOS 13.0, *) {
+            totoButton.setTitleColor(.link, for: .normal)
+        } else {
+            totoButton.setTitleColor(.blue, for: .normal)
+        }
+        totoButton.addTarget(self, action: #selector(barButtonAction), for: .touchUpInside)
+        navBarItem.customView = totoButton
     }
 }
 

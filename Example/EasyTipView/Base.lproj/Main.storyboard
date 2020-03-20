@@ -241,7 +241,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" title="EasyTipView - Demo" id="gPI-yp-aVH">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="HcR-vd-SJ7">
+                        <barButtonItem key="rightBarButtonItem" title="Item" style="plain" id="HcR-vd-SJ7">
                             <connections>
                                 <action selector="barButtonActionWithSender:" destination="7mQ-RG-Clx" id="DWI-ft-6oN"/>
                             </connections>
